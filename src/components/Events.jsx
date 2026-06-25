@@ -3,6 +3,7 @@ import { EVENTS, REGIONS, EVENT_TYPES } from '../data'
 import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
 import HostMeetModal from './HostMeetModal'
+import EventImage from './EventImage'
 
 export default function Events() {
   const [events, setEvents] = useState(EVENTS)
@@ -92,14 +93,24 @@ export default function Events() {
                 delay={(idx % 3) * 80}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink-card transition hover:-translate-y-1 hover:border-redline/50"
               >
-                <div className="carbon relative flex h-32 items-center justify-center text-5xl">
-                  <span>{e.emoji}</span>
+                <div className="carbon relative h-36 overflow-hidden">
+                  <EventImage event={e} />
+                  {/* Legibility overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-card via-black/30 to-black/10" />
                   <span className="absolute right-3 top-3 rounded-full bg-redline/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
                     {e.tag}
                   </span>
-                  <span className="absolute left-3 top-3 rounded-md bg-black/50 px-2 py-1 text-[10px] font-semibold text-slate-200">
+                  <span className="absolute left-3 top-3 rounded-md bg-black/60 px-2 py-1 text-[10px] font-semibold text-slate-100 backdrop-blur-sm">
                     {e.type}
                   </span>
+                  <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/55 text-lg backdrop-blur-sm">
+                      {e.emoji}
+                    </span>
+                    <span className="rounded-md bg-black/55 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                      📍 {e.city}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <h3 className="font-bold text-white">{e.title}</h3>
