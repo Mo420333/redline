@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import CarArt from './CarArt'
 import { fetchUnsplash, photoApiEnabled } from '../lib/carImage'
 
 /**
- * Shows the best available photo for a car:
+ * Shows the best available real photo for a car:
  *   1. an Unsplash photo (if VITE_UNSPLASH_KEY is set and `kw` matches),
  *   2. else the post's existing `img` (keyword image service),
- *   3. else the SVG car art (offline / load failure).
+ *   3. else a neutral placeholder (never an illustration).
  */
 export default function CarImage({ post, className = 'h-full w-full object-cover' }) {
   const [src, setSrc] = useState(post.img || null)
@@ -14,7 +13,6 @@ export default function CarImage({ post, className = 'h-full w-full object-cover
 
   useEffect(() => {
     let active = true
-    // Uploaded photos (data URLs) are already final — don't override them.
     if (photoApiEnabled && post.kw && !post.mine) {
       fetchUnsplash(post.kw).then((url) => {
         if (active && url) setSrc(url)
@@ -36,5 +34,11 @@ export default function CarImage({ post, className = 'h-full w-full object-cover
       />
     )
   }
-  return <CarArt color={post.color} sky={post.sky} brand={post.brand} />
+
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-gradient-to-br from-ink-card to-ink-soft text-slate-500">
+      <span className="text-3xl">🏎️</span>
+      <span className="px-2 text-center text-xs">{post.car}</span>
+    </div>
+  )
 }

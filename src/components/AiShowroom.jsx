@@ -3,21 +3,24 @@ import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
 import { fetchUnsplash, photoApiEnabled } from '../lib/carImage'
 
-const lf = (kw, lock) => `https://loremflickr.com/1200/675/${kw}?lock=${lock}`
+const W = (p) => {
+  const [d1, d2, file] = p.split('/')
+  return `https://upload.wikimedia.org/wikipedia/commons/thumb/${d1}/${d2}/${file}/1280px-${file}`
+}
 
 const CARS = [
-  { name: 'Pagani Huayra', kw: 'Pagani Huayra', img: lf('pagani,hypercar', 7) },
-  { name: 'Lamborghini Huracán', kw: 'Lamborghini Huracan', img: lf('lamborghini', 20) },
-  { name: 'Ferrari 488', kw: 'Ferrari 488', img: lf('ferrari', 41) },
-  { name: 'McLaren 720S', kw: 'McLaren 720S', img: lf('mclaren', 43) },
-  { name: 'BMW M4', kw: 'BMW M4', img: lf('bmw,m4', 14) },
-  { name: 'Nissan GT-R', kw: 'Nissan GT-R', img: lf('nissan,gtr', 11) },
-  { name: 'Porsche 911', kw: 'Porsche 911', img: lf('porsche,911', 18) },
-  { name: 'Corvette C8', kw: 'Chevrolet Corvette', img: lf('chevrolet,corvette', 19) },
-  { name: 'Mustang GT', kw: 'Ford Mustang', img: lf('ford,mustang', 17) },
-  { name: 'Mazda RX-7', kw: 'Mazda RX-7', img: lf('mazda,rx7', 12) },
-  { name: 'Toyota Supra', kw: 'Toyota Supra', img: lf('toyota,supra', 42) },
-  { name: 'Audi R8', kw: 'Audi R8', img: lf('audi,r8', 44) },
+  { name: 'Pagani Huayra', kw: 'Pagani Huayra', img: W('3/36/Pagani%2C_GIMS_2019%2C_Le_Grand-Saconnex_%28GIMS0023%29.jpg/1024px-Pagani%2C_GIMS_2019%2C_Le_Grand-Saconnex_%28GIMS0023%29.jpg') },
+  { name: 'Lamborghini Huracán', kw: 'Lamborghini Huracan', img: W('c/ca/2017_Lamborghini_Huracan_LP610.jpg/1024px-2017_Lamborghini_Huracan_LP610.jpg') },
+  { name: 'Ferrari 488', kw: 'Ferrari 488', img: W('0/0d/2018_Ferrari_488_GTB_4.jpg/1024px-2018_Ferrari_488_GTB_4.jpg') },
+  { name: 'McLaren 720S', kw: 'McLaren 720S', img: W('2/23/2018_McLaren_720S_V8_S-A_4.0.jpg/1024px-2018_McLaren_720S_V8_S-A_4.0.jpg') },
+  { name: 'BMW M4', kw: 'BMW M4', img: W('e/e2/2021_BMW_M4_Competition_Automatic_3.0_Front.jpg/1024px-2021_BMW_M4_Competition_Automatic_3.0_Front.jpg') },
+  { name: 'Nissan GT-R', kw: 'Nissan GT-R', img: W('0/06/Nissan_Skyline_GT-R_R34_V_Spec_II.jpg/1024px-Nissan_Skyline_GT-R_R34_V_Spec_II.jpg') },
+  { name: 'Porsche 911', kw: 'Porsche 911', img: W('a/a2/Porsche_911_No_1000000%2C_70_Years_Porsche_Sports_Car%2C_Berlin_%281X7A3888%29.jpg/1024px-Porsche_911_No_1000000%2C_70_Years_Porsche_Sports_Car%2C_Berlin_%281X7A3888%29.jpg') },
+  { name: 'Corvette C8', kw: 'Chevrolet Corvette', img: W('4/4b/Chevrolet_Corvette_C8_IAA_2021_1X7A0156.jpg/1024px-Chevrolet_Corvette_C8_IAA_2021_1X7A0156.jpg') },
+  { name: 'Mustang GT', kw: 'Ford Mustang', img: W('9/9c/Ford_Mustang_VII_GT_Rutesheimer_Autoschau_2025_DSC_9234.jpg/1024px-Ford_Mustang_VII_GT_Rutesheimer_Autoschau_2025_DSC_9234.jpg') },
+  { name: 'Mazda RX-7', kw: 'Mazda RX-7', img: W('8/8c/1994_Mazda_RX-7_R2_in_Vintage_Red%2C_front_left_%28Lime_Rock%29.jpg/1024px-1994_Mazda_RX-7_R2_in_Vintage_Red%2C_front_left_%28Lime_Rock%29.jpg') },
+  { name: 'Toyota Supra', kw: 'Toyota Supra', img: W('e/e5/2020_Toyota_GR_Supra_%28United_States%29.png/1024px-2020_Toyota_GR_Supra_%28United_States%29.png') },
+  { name: 'Audi R8', kw: 'Audi R8', img: W('d/d2/2018_Audi_R8_Coupe_V10_plus_Front.jpg/1024px-2018_Audi_R8_Coupe_V10_plus_Front.jpg') },
 ]
 
 const SCENES = [
@@ -99,11 +102,13 @@ export default function AiShowroom() {
   const [accent, setAccent] = useState('#dc2626')
   const [photo, setPhoto] = useState(null)
   const [src, setSrc] = useState(CARS[0].img)
+  const [imgFailed, setImgFailed] = useState(false)
   const [phase, setPhase] = useState('ready') // ready | generating
   const fileRef = useRef(null)
 
   // Resolve the real-car image (Unsplash when keyed, else keyword service).
   useEffect(() => {
+    setImgFailed(false)
     if (photo) {
       setSrc(photo)
       return
@@ -173,11 +178,19 @@ export default function AiShowroom() {
               <div className="absolute inset-0 flex flex-col items-center justify-center px-[8%]">
                 <div className="relative w-full" style={{ maxWidth: '78%' }}>
                   <div className="absolute -inset-6 rounded-full blur-3xl" style={{ background: `${accent}40` }} />
-                  <img
-                    src={src}
-                    alt={carName}
-                    className="relative aspect-video w-full rounded-xl border border-white/15 object-cover shadow-2xl"
-                  />
+                  {imgFailed ? (
+                    <div className="relative flex aspect-video w-full flex-col items-center justify-center gap-1 rounded-xl border border-white/15 bg-black/40 text-slate-300 shadow-2xl">
+                      <span className="text-4xl">🏎️</span>
+                      <span className="text-sm">{carName}</span>
+                    </div>
+                  ) : (
+                    <img
+                      src={src}
+                      alt={carName}
+                      onError={() => setImgFailed(true)}
+                      className="relative aspect-video w-full rounded-xl border border-white/15 object-cover shadow-2xl"
+                    />
+                  )}
                 </div>
                 <div className="mt-1 w-full origin-top scale-y-[-1] opacity-25 blur-[2px]" style={{ maxWidth: '78%' }} aria-hidden="true">
                   <img src={src} alt="" className="aspect-video w-full rounded-xl object-cover" />
