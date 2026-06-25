@@ -12,7 +12,7 @@ export default function RedlineLogo({ className = 'h-7 w-7' }) {
       <path
         d="M4 11 A14 14 0 0 1 9 5"
         fill="none"
-        stroke="#3b82f6"
+        stroke="#dc2626"
         strokeWidth="3"
         strokeLinecap="round"
       />
