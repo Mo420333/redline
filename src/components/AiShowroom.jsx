@@ -1,117 +1,199 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
-import CarArt from './CarArt'
+import { fetchUnsplash, photoApiEnabled } from '../lib/carImage'
 
-const SCENES = [
-  { key: 'studio', name: 'Studio White', emoji: '🏢', bg: 'radial-gradient(ellipse at 50% 25%, #e5e7eb, #94a3b8 55%, #334155)', glow: '#ffffff' },
-  { key: 'neon', name: 'Neon Garage', emoji: '🟣', bg: 'linear-gradient(180deg, #0b0f1a, #2e1065)', glow: '#dc2626', neon: true },
-  { key: 'tokyo', name: 'Tokyo Night', emoji: '🌃', bg: 'linear-gradient(180deg, #0b1026, #3b0764)', glow: '#22d3ee', skyline: true },
-  { key: 'canyon', name: 'Canyon Sunset', emoji: '🌄', bg: 'linear-gradient(180deg, #7c2d12, #dc2626 45%, #f59e0b)', glow: '#fbbf24', sun: true },
+const lf = (kw, lock) => `https://loremflickr.com/1200/675/${kw}?lock=${lock}`
+
+const CARS = [
+  { name: 'Pagani Huayra', kw: 'Pagani Huayra', img: lf('pagani,hypercar', 7) },
+  { name: 'Lamborghini Huracán', kw: 'Lamborghini Huracan', img: lf('lamborghini', 20) },
+  { name: 'Ferrari 488', kw: 'Ferrari 488', img: lf('ferrari', 41) },
+  { name: 'McLaren 720S', kw: 'McLaren 720S', img: lf('mclaren', 43) },
+  { name: 'BMW M4', kw: 'BMW M4', img: lf('bmw,m4', 14) },
+  { name: 'Nissan GT-R', kw: 'Nissan GT-R', img: lf('nissan,gtr', 11) },
+  { name: 'Porsche 911', kw: 'Porsche 911', img: lf('porsche,911', 18) },
+  { name: 'Corvette C8', kw: 'Chevrolet Corvette', img: lf('chevrolet,corvette', 19) },
+  { name: 'Mustang GT', kw: 'Ford Mustang', img: lf('ford,mustang', 17) },
+  { name: 'Mazda RX-7', kw: 'Mazda RX-7', img: lf('mazda,rx7', 12) },
+  { name: 'Toyota Supra', kw: 'Toyota Supra', img: lf('toyota,supra', 42) },
+  { name: 'Audi R8', kw: 'Audi R8', img: lf('audi,r8', 44) },
 ]
 
-const COLORS = ['#dc2626', '#2563eb', '#e5e7eb', '#f97316', '#10b981', '#0a0a0a']
+const SCENES = [
+  { key: 'studio', name: 'Studio White', emoji: '🏢', bg: 'radial-gradient(ellipse at 50% 20%, #e5e7eb, #94a3b8 55%, #334155)', deco: null },
+  { key: 'neon', name: 'Neon Garage', emoji: '🟣', bg: 'linear-gradient(180deg, #0b0f1a, #2e1065)', deco: 'neon' },
+  { key: 'tokyo', name: 'Tokyo Night', emoji: '🌃', bg: 'linear-gradient(180deg, #0b1026, #3b0764)', deco: 'skyline' },
+  { key: 'canyon', name: 'Canyon Sunset', emoji: '🌄', bg: 'linear-gradient(180deg, #7c2d12, #dc2626 45%, #f59e0b)', deco: 'sun' },
+  { key: 'miami', name: 'Miami Beach', emoji: '🌴', bg: 'linear-gradient(180deg, #0ea5e9, #f472b6 70%, #fde68a)', deco: 'palms' },
+  { key: 'mountain', name: 'Mountain Pass', emoji: '🏔️', bg: 'linear-gradient(180deg, #1e293b, #0f766e)', deco: 'mountains' },
+  { key: 'cyber', name: 'Cyber Grid', emoji: '🟦', bg: 'linear-gradient(180deg, #020617, #1e1b4b)', deco: 'grid' },
+  { key: 'snow', name: 'Snow Peak', emoji: '❄️', bg: 'linear-gradient(180deg, #cbd5e1, #475569)', deco: 'snow' },
+]
+
+const ACCENTS = ['#dc2626', '#2563eb', '#22d3ee', '#ec4899', '#f97316', '#22c55e', '#ffffff', '#facc15']
+
+function Deco({ kind, accent }) {
+  switch (kind) {
+    case 'neon':
+      return (
+        <>
+          <div className="absolute left-[10%] top-0 h-full w-1.5 blur-[2px]" style={{ background: accent }} />
+          <div className="absolute right-[10%] top-0 h-full w-1.5 bg-cyan/70 blur-[2px]" />
+          <div className="absolute inset-x-0 top-6 mx-auto h-1 w-2/3 bg-white/40 blur-[3px]" />
+        </>
+      )
+    case 'skyline':
+      return (
+        <div className="absolute bottom-[28%] left-0 right-0 flex items-end justify-center gap-1 opacity-40">
+          {[24, 40, 30, 56, 36, 48, 28, 44, 32, 50].map((h, i) => (
+            <div key={i} className="w-5 bg-black" style={{ height: h }} />
+          ))}
+        </div>
+      )
+    case 'sun':
+      return <div className="absolute left-1/2 top-[14%] h-28 w-28 -translate-x-1/2 rounded-full bg-yellow-200/80 blur-xl" />
+    case 'palms':
+      return (
+        <div className="absolute bottom-[26%] left-0 right-0 flex justify-between px-6 text-4xl opacity-70">
+          <span>🌴</span>
+          <span>🌴</span>
+        </div>
+      )
+    case 'mountains':
+      return (
+        <div className="absolute bottom-[26%] left-0 right-0 flex items-end justify-center">
+          <div className="mx-[-10px] h-0 w-0 border-x-[70px] border-b-[90px] border-x-transparent border-b-slate-900/70" />
+          <div className="mx-[-10px] h-0 w-0 border-x-[90px] border-b-[120px] border-x-transparent border-b-slate-900/80" />
+          <div className="mx-[-10px] h-0 w-0 border-x-[70px] border-b-[80px] border-x-transparent border-b-slate-900/70" />
+        </div>
+      )
+    case 'grid':
+      return (
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/2 opacity-50"
+          style={{
+            background:
+              'repeating-linear-gradient(90deg, transparent 0 38px, rgba(34,211,238,0.5) 38px 40px), repeating-linear-gradient(0deg, transparent 0 38px, rgba(34,211,238,0.4) 38px 40px)',
+            transform: 'perspective(300px) rotateX(60deg)',
+            transformOrigin: 'bottom',
+          }}
+        />
+      )
+    case 'snow':
+      return (
+        <div className="absolute inset-0 opacity-70">
+          {[12, 30, 48, 66, 84, 20, 40, 60, 80, 90].map((l, i) => (
+            <div key={i} className="absolute h-1 w-1 rounded-full bg-white" style={{ left: `${l}%`, top: `${(i * 9 + 8) % 70}%` }} />
+          ))}
+        </div>
+      )
+    default:
+      return null
+  }
+}
 
 export default function AiShowroom() {
+  const [carIdx, setCarIdx] = useState(0)
   const [scene, setScene] = useState(SCENES[1])
-  const [color, setColor] = useState('#1d4ed8')
-  const [brand, setBrand] = useState('bmw')
+  const [accent, setAccent] = useState('#dc2626')
   const [photo, setPhoto] = useState(null)
+  const [src, setSrc] = useState(CARS[0].img)
   const [phase, setPhase] = useState('ready') // ready | generating
   const fileRef = useRef(null)
 
-  const regenerate = (nextScene) => {
-    if (nextScene) setScene(nextScene)
+  // Resolve the real-car image (Unsplash when keyed, else keyword service).
+  useEffect(() => {
+    if (photo) {
+      setSrc(photo)
+      return
+    }
+    const car = CARS[carIdx]
+    setSrc(car.img)
+    let active = true
+    if (photoApiEnabled) {
+      fetchUnsplash(car.kw).then((u) => {
+        if (active && u) setSrc(u)
+      })
+    }
+    return () => {
+      active = false
+    }
+  }, [carIdx, photo])
+
+  const regenerate = () => {
     setPhase('generating')
-    setTimeout(() => setPhase('ready'), 1100)
+    setTimeout(() => setPhase('ready'), 1000)
+  }
+
+  const pickCar = (i) => {
+    setPhoto(null)
+    setCarIdx(i)
+    regenerate()
   }
 
   const pickFile = (e) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setPhoto(URL.createObjectURL(file))
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      setPhoto(reader.result)
       regenerate()
     }
+    reader.readAsDataURL(file)
   }
 
   const surprise = () => {
-    const kw = brand === 'bmw' ? 'bmw,car' : 'sportscar,car'
-    setPhoto(`https://loremflickr.com/1200/675/${kw}?lock=${Math.floor(Math.random() * 60) + 1}`)
+    setPhoto(null)
+    setCarIdx((i) => (i + 1) % CARS.length)
     regenerate()
   }
+
+  const carName = photo ? 'Your ride' : CARS[carIdx].name
 
   return (
     <section id="ai-showroom" className="bg-ink-soft py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-5">
         <SectionHeading
           eyebrow="AI Showroom"
-          title="Drop your ride into a dream scene"
-          subtitle="Pick a backdrop, set your color or upload a photo, and stage your car in a studio-grade AI scene — ready to post."
+          title="Stage a real car in a dream scene"
+          subtitle="Pick from a dozen real cars, drop it into one of eight scenes, set the lighting — or upload your own ride."
         />
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+        <div className="grid gap-6 lg:grid-cols-[1fr_330px]">
           {/* Stage */}
           <Reveal className="overflow-hidden rounded-3xl border border-white/10">
             <div className="relative aspect-video w-full" style={{ background: scene.bg }}>
-              {/* Scene deco */}
-              {scene.neon && (
-                <>
-                  <div className="absolute left-[12%] top-0 h-full w-1.5 bg-magenta/70 blur-[2px]" />
-                  <div className="absolute right-[12%] top-0 h-full w-1.5 bg-cyan/70 blur-[2px]" />
-                  <div className="absolute inset-x-0 top-8 mx-auto h-1 w-2/3 bg-white/40 blur-[3px]" />
-                </>
-              )}
-              {scene.sun && (
-                <div className="absolute left-1/2 top-[18%] h-28 w-28 -translate-x-1/2 rounded-full bg-yellow-200/80 blur-xl" />
-              )}
-              {scene.skyline && (
-                <div className="absolute bottom-[30%] left-0 right-0 flex items-end justify-center gap-1 opacity-40">
-                  {[24, 40, 30, 56, 36, 48, 28, 44, 32].map((h, i) => (
-                    <div key={i} className="w-5 bg-black" style={{ height: h }} />
-                  ))}
-                </div>
-              )}
+              <Deco kind={scene.deco} accent={accent} />
 
-              {/* Floor glow */}
-              <div
-                className="absolute inset-x-0 bottom-0 h-1/3"
-                style={{ background: `linear-gradient(to top, ${scene.glow}22, transparent)` }}
-              />
+              {/* Floor light */}
+              <div className="absolute inset-x-0 bottom-0 h-1/3" style={{ background: `linear-gradient(to top, ${accent}33, transparent)` }} />
 
-              {/* Car + reflection */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="relative h-1/2 w-3/4">
-                  <div
-                    className="absolute -inset-6 rounded-full blur-3xl"
-                    style={{ background: `${scene.glow}33` }}
+              {/* Real car + reflection */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center px-[8%]">
+                <div className="relative w-full" style={{ maxWidth: '78%' }}>
+                  <div className="absolute -inset-6 rounded-full blur-3xl" style={{ background: `${accent}40` }} />
+                  <img
+                    src={src}
+                    alt={carName}
+                    className="relative aspect-video w-full rounded-xl border border-white/15 object-cover shadow-2xl"
                   />
-                  <div className="relative h-full w-full">
-                    {photo ? (
-                      <img src={photo} alt="Your car" className="h-full w-full object-contain" />
-                    ) : (
-                      <CarArt bare color={color} brand={brand} />
-                    )}
-                  </div>
                 </div>
-                {/* Reflection */}
-                <div className="h-1/4 w-3/4 origin-top scale-y-[-1] opacity-25 blur-[2px]" aria-hidden="true">
-                  {photo ? (
-                    <img src={photo} alt="" className="h-full w-full object-contain" />
-                  ) : (
-                    <CarArt bare color={color} brand={brand} />
-                  )}
+                <div className="mt-1 w-full origin-top scale-y-[-1] opacity-25 blur-[2px]" style={{ maxWidth: '78%' }} aria-hidden="true">
+                  <img src={src} alt="" className="aspect-video w-full rounded-xl object-cover" />
                 </div>
               </div>
 
-              {/* Generating overlay */}
               {phase === 'generating' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/60 backdrop-blur-sm">
                   <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-redline" />
-                  <p className="text-sm font-semibold text-white">✨ Styling your ride…</p>
+                  <p className="text-sm font-semibold text-white">✨ Staging {carName}…</p>
                 </div>
               )}
 
-              {/* Badge */}
+              <span className="absolute left-3 top-3 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                {carName} · {scene.name}
+              </span>
               <span className="absolute right-3 top-3 rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-200">
                 AI-styled preview
               </span>
@@ -119,98 +201,83 @@ export default function AiShowroom() {
           </Reveal>
 
           {/* Controls */}
-          <Reveal delay={120} className="space-y-6 rounded-3xl border border-white/10 bg-ink-card p-6">
+          <Reveal delay={120} className="space-y-5 rounded-3xl border border-white/10 bg-ink-card p-6">
+            {/* Car picker */}
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Scene</p>
-              <div className="grid grid-cols-2 gap-2">
-                {SCENES.map((s) => (
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                Choose a car ({CARS.length})
+              </p>
+              <div className="grid max-h-44 grid-cols-2 gap-2 overflow-y-auto pr-1">
+                {CARS.map((c, i) => (
                   <button
-                    key={s.key}
-                    onClick={() => regenerate(s)}
-                    className={`rounded-xl border px-3 py-2.5 text-left text-sm font-medium transition ${
-                      scene.key === s.key
+                    key={c.name}
+                    onClick={() => pickCar(i)}
+                    className={`rounded-lg border px-3 py-2 text-left text-xs font-medium transition ${
+                      !photo && carIdx === i
                         ? 'border-redline bg-redline/10 text-white'
                         : 'border-white/10 text-slate-300 hover:bg-white/5'
                     }`}
                   >
-                    <span className="mr-1.5">{s.emoji}</span>
+                    {c.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Scene picker */}
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                Scene ({SCENES.length})
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {SCENES.map((s) => (
+                  <button
+                    key={s.key}
+                    onClick={() => {
+                      setScene(s)
+                      regenerate()
+                    }}
+                    className={`rounded-lg border px-3 py-2 text-left text-xs font-medium transition ${
+                      scene.key === s.key ? 'border-redline bg-redline/10 text-white' : 'border-white/10 text-slate-300 hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="mr-1">{s.emoji}</span>
                     {s.name}
                   </button>
                 ))}
               </div>
             </div>
 
+            {/* Lighting color */}
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Body style</p>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { k: 'bmw', label: 'BMW' },
-                  { k: undefined, label: 'Generic' },
-                ].map((b) => (
-                  <button
-                    key={b.label}
-                    onClick={() => {
-                      setPhoto(null)
-                      setBrand(b.k)
-                      regenerate()
-                    }}
-                    className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition ${
-                      brand === b.k && !photo
-                        ? 'border-redline bg-redline/10 text-white'
-                        : 'border-white/10 text-slate-300 hover:bg-white/5'
-                    }`}
-                  >
-                    {b.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                Car color {photo && <span className="text-slate-600">(using your photo)</span>}
-              </p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Lighting</p>
               <div className="flex flex-wrap gap-2.5">
-                {COLORS.map((c) => (
+                {ACCENTS.map((c) => (
                   <button
                     key={c}
                     onClick={() => {
-                      setPhoto(null)
-                      setColor(c)
+                      setAccent(c)
                       regenerate()
                     }}
-                    aria-label={`Color ${c}`}
-                    className={`h-8 w-8 rounded-full border-2 transition ${
-                      color === c && !photo ? 'border-white scale-110' : 'border-white/20'
-                    }`}
+                    aria-label={`Lighting ${c}`}
+                    className={`h-8 w-8 rounded-full border-2 transition ${accent === c ? 'scale-110 border-white' : 'border-white/20'}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
               </div>
             </div>
 
-            <div className="space-y-2.5">
-              <button
-                onClick={() => fileRef.current?.click()}
-                className="w-full rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5"
-              >
+            {/* Actions */}
+            <div className="space-y-2.5 border-t border-white/10 pt-4">
+              <button onClick={() => fileRef.current?.click()} className="w-full rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5">
                 📷 Use my own photo
               </button>
               <input ref={fileRef} type="file" accept="image/*" onChange={pickFile} className="hidden" />
-              <button
-                onClick={surprise}
-                className="w-full rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5"
-              >
-                🎲 Surprise me (real car)
+              <button onClick={surprise} className="w-full rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5">
+                🎲 Surprise me
               </button>
-              <button
-                onClick={() => regenerate()}
-                className="w-full rounded-xl bg-redline px-4 py-3 font-semibold text-white transition hover:bg-redline-dark"
-              >
+              <button onClick={regenerate} className="w-full rounded-xl bg-redline px-4 py-3 font-semibold text-white transition hover:bg-redline-dark">
                 ✨ Generate scene
-              </button>
-              <button className="w-full rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5">
-                Post to Showroom
               </button>
             </div>
           </Reveal>
