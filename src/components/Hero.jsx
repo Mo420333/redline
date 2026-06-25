@@ -34,8 +34,9 @@ export default function Hero() {
       {/* Cinematic overlays for legibility + brand tint */}
       <div className="absolute inset-0 bg-ink/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/80" />
-      <div className="absolute inset-0 bg-gradient-to-r from-redline/15 via-transparent to-transparent" />
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-80 w-[40rem] -translate-x-1/2 rounded-full bg-redline/25 blur-[140px]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-redline/15 via-transparent to-electric/15" />
+      <div className="pointer-events-none absolute -top-24 left-1/3 h-80 w-[34rem] -translate-x-1/2 rounded-full bg-redline/25 blur-[140px]" />
+      <div className="pointer-events-none absolute -top-10 right-1/4 h-72 w-80 rounded-full bg-electric/20 blur-[130px]" />
 
       <div className="relative mx-auto max-w-7xl px-5 pt-24 pb-20 text-center sm:pt-36 sm:pb-32">
         <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-200 backdrop-blur-sm">
@@ -47,7 +48,7 @@ export default function Hero() {
           Find your people.
           <br />
           Find your{' '}
-          <span className="bg-gradient-to-r from-red-glow to-redline bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-red-glow via-redline to-electric bg-clip-text text-transparent">
             meet.
           </span>
         </h1>
@@ -87,7 +88,7 @@ export default function Hero() {
         <div className="flex w-max animate-marquee gap-8 whitespace-nowrap px-5 text-sm font-semibold uppercase tracking-widest text-slate-500">
           {[...STAT_TICKER, ...STAT_TICKER].map((t, i) => (
             <span key={i} className="flex items-center gap-8">
-              {t} <span className="text-redline">●</span>
+              {t} <span className={i % 2 ? 'text-electric' : 'text-redline'}>●</span>
             </span>
           ))}
         </div>
