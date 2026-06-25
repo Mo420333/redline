@@ -2,6 +2,7 @@ import { MERCH } from '../data'
 import { useCart } from '../store'
 import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
+import ProductImage from './ProductImage'
 
 export default function Merch() {
   const { addToCart, items, count, total, removeFromCart } = useCart()
@@ -22,11 +23,8 @@ export default function Merch() {
               delay={(idx % 3) * 70}
               className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink-card"
             >
-              <div
-                className="flex h-36 items-center justify-center text-5xl transition group-hover:scale-105"
-                style={{ background: `radial-gradient(circle at 50% 40%, ${p.color}33, transparent 70%)` }}
-              >
-                {p.emoji}
+              <div className="h-36 overflow-hidden bg-white">
+                <ProductImage product={p} className="h-full w-full object-cover transition group-hover:scale-105" />
               </div>
               <div className="flex flex-1 flex-col p-4">
                 <h3 className="text-sm font-bold text-white">{p.name}</h3>

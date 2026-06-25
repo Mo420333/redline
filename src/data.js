@@ -29,12 +29,12 @@ export const GIVEAWAYS = [
 ]
 
 export const MERCH = [
-  { id: 'm1', name: 'Redline Logo Tee', price: 32, emoji: '👕', color: '#dc2626' },
-  { id: 'm2', name: 'Apex Snapback', price: 28, emoji: '🧢', color: '#ef4444' },
-  { id: 'm3', name: 'Touge Hoodie', price: 64, emoji: '🧥', color: '#b91c1c' },
-  { id: 'm4', name: 'Tach Sticker Pack', price: 12, emoji: '🩹', color: '#f87171' },
-  { id: 'm5', name: 'Pit Crew Jacket', price: 98, emoji: '🏎️', color: '#991b1b' },
-  { id: 'm6', name: 'Redline Enamel Pin', price: 9, emoji: '📌', color: '#dc2626' },
+  { id: 'm1', name: 'Redline Logo Tee', price: 32, emoji: '👕', color: '#dc2626', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Wiki_Loves_Bangla_T-Shirt_Black.jpg/960px-Wiki_Loves_Bangla_T-Shirt_Black.jpg' },
+  { id: 'm2', name: 'Apex Snapback', price: 28, emoji: '🧢', color: '#ef4444', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Snapback_Hat.jpg/960px-Snapback_Hat.jpg' },
+  { id: 'm3', name: 'Touge Hoodie', price: 64, emoji: '🧥', color: '#b91c1c', img: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Fastcolors-men_fashion_sweatshirt-back-printed.jpg' },
+  { id: 'm4', name: 'Tach Sticker Pack', price: 12, emoji: '🩹', color: '#f87171', img: 'https://upload.wikimedia.org/wikipedia/commons/4/45/British_Columbia_Sticker_Decal_May_2009.jpg' },
+  { id: 'm5', name: 'Pit Crew Jacket', price: 98, emoji: '🏎️', color: '#991b1b', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Black_bomber_jacket.jpg/960px-Black_bomber_jacket.jpg' },
+  { id: 'm6', name: 'Redline Enamel Pin', price: 9, emoji: '📌', color: '#dc2626', img: 'https://upload.wikimedia.org/wikipedia/commons/4/40/CCS_Pin_Badge.jpg' },
 ]
 
 export const CHANNELS = [
