@@ -36,13 +36,11 @@ export default function QuickShare() {
   }
 
   const field =
-    'w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 outline-none placeholder:text-slate-400 focus:border-redline focus:ring-2 focus:ring-redline/15'
+    'w-full rounded-lg border border-white/15 bg-ink-soft px-4 py-2.5 text-white outline-none placeholder:text-slate-500 focus:border-redline focus:ring-2 focus:ring-redline/20'
 
   return (
-    <section id="share" className="bg-slate-50">
-      <div className="mx-auto max-w-7xl px-5 py-20 sm:py-28">
+    <section id="share" className="mx-auto max-w-7xl px-5 py-20 sm:py-28">
       <SectionHeading
-        tone="light"
         eyebrow="Met Someone Cool?"
         title="Swap info in one tap"
         subtitle="Your Garage Pass holds your name, your build, and your socials. Let someone scan the code or hit share — no typing numbers at the meet."
@@ -52,15 +50,15 @@ export default function QuickShare() {
         {/* Editor */}
         <Reveal className="order-2 space-y-4 lg:order-1">
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Name</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400">Name</label>
             <input className={field} value={profile.name} onChange={set('name')} />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Your build</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400">Your build</label>
             <input className={field} value={profile.car} onChange={set('car')} />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Social handle</label>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400">Social handle</label>
             <input className={field} value={profile.handle} onChange={set('handle')} />
           </div>
           <button
@@ -102,7 +100,6 @@ export default function QuickShare() {
             </div>
           </div>
         </Reveal>
-      </div>
       </div>
     </section>
   )

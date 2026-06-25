@@ -21,8 +21,7 @@ export default function Showroom() {
   }, [posts, cat, sort, lovesFor])
 
   return (
-    <section id="showroom" className="bg-ink">
-      <div className="mx-auto max-w-7xl px-5 py-20 sm:py-28">
+    <section id="showroom" className="mx-auto max-w-7xl px-5 py-20 sm:py-28">
       <SectionHeading
         eyebrow="The Showroom"
         title="Show your ride. Get the love."
@@ -142,7 +141,6 @@ export default function Showroom() {
       )}
 
       <ShareRideModal open={modalOpen} onClose={() => setModalOpen(false)} onCreate={addPost} />
-      </div>
     </section>
   )
 }
