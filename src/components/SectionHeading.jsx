@@ -1,6 +1,8 @@
 import Reveal from './Reveal'
 
-export default function SectionHeading({ eyebrow, title, subtitle, light }) {
+export default function SectionHeading({ eyebrow, title, subtitle, tone = 'dark' }) {
+  const titleColor = tone === 'light' ? 'text-slate-900' : 'text-white'
+  const subColor = tone === 'light' ? 'text-slate-600' : 'text-slate-400'
   return (
     <Reveal className="mx-auto mb-12 max-w-2xl text-center">
       {eyebrow && (
@@ -8,10 +10,10 @@ export default function SectionHeading({ eyebrow, title, subtitle, light }) {
           {eyebrow}
         </span>
       )}
-      <h2 className={`mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl ${light ? 'text-white' : 'text-white'}`}>
+      <h2 className={`mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl ${titleColor}`}>
         {title}
       </h2>
-      {subtitle && <p className="mt-4 text-slate-400">{subtitle}</p>}
+      {subtitle && <p className={`mt-4 ${subColor}`}>{subtitle}</p>}
     </Reveal>
   )
 }

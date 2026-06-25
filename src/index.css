@@ -19,14 +19,8 @@ html {
 }
 
 body {
-  background-color: var(--color-ink);
-  background-image: radial-gradient(
-    1100px 560px at 50% -8%,
-    rgba(220, 38, 38, 0.12),
-    transparent 60%
-  );
-  background-attachment: fixed;
-  color: #e5e7eb;
+  background-color: #ffffff;
+  color: #0f172a;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
