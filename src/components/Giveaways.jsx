@@ -24,19 +24,30 @@ export default function Giveaways() {
             return (
               <Reveal
                 key={g.id}
-                delay={idx * 100}
-                className="relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-ink-card p-7"
+                delay={idx * 90}
+                className={`relative flex flex-col overflow-hidden rounded-3xl border p-7 ${
+                  g.featured
+                    ? 'border-redline/60 bg-gradient-to-br from-redline/15 to-ink-card ring-1 ring-redline/30 lg:col-span-3'
+                    : 'border-white/10 bg-ink-card'
+                }`}
               >
                 <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-redline/20 blur-2xl" />
                 <div className="relative flex items-start justify-between">
                   <span className="text-5xl">{g.emoji}</span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      urgent ? 'bg-redline text-white' : 'bg-white/10 text-slate-300'
-                    }`}
-                  >
-                    {g.endsInDays === 1 ? 'Ends today' : `Ends in ${g.endsInDays}d`}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {g.featured && (
+                      <span className="rounded-full bg-redline px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                        ⭐ Grand Prize
+                      </span>
+                    )}
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-bold ${
+                        urgent ? 'bg-redline text-white' : 'bg-white/10 text-slate-300'
+                      }`}
+                    >
+                      {g.endsInDays === 1 ? 'Ends today' : `Ends in ${g.endsInDays}d`}
+                    </span>
+                  </div>
                 </div>
 
                 <h3 className="relative mt-5 text-lg font-bold text-white">{g.prize}</h3>

@@ -188,12 +188,12 @@ export default function AiShowroom() {
                       src={src}
                       alt={carName}
                       onError={() => setImgFailed(true)}
-                      className="relative aspect-video w-full rounded-xl border border-white/15 object-cover shadow-2xl"
+                      className="relative aspect-video w-full rounded-xl border border-white/15 bg-black/30 object-contain shadow-2xl"
                     />
                   )}
                 </div>
                 <div className="mt-1 w-full origin-top scale-y-[-1] opacity-25 blur-[2px]" style={{ maxWidth: '78%' }} aria-hidden="true">
-                  <img src={src} alt="" className="aspect-video w-full rounded-xl object-cover" />
+                  <img src={src} alt="" className="aspect-video w-full rounded-xl object-contain" />
                 </div>
               </div>
 

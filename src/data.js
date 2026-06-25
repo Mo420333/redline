@@ -23,18 +23,23 @@ export const REGIONS = ['All', 'West', 'South', 'East', 'Europe', 'Asia']
 export const EVENT_TYPES = ['All Types', 'Cars & Coffee', 'Cruise', 'Car Show', 'Track Day']
 
 export const GIVEAWAYS = [
+  { id: 'g0', prize: '$10,000 Dream Build Fund', sponsor: 'The Redline Grand Prize', endsInDays: 14, value: '$10,000', entries: 28400, emoji: '💰', featured: true },
   { id: 'g1', prize: 'Set of 4 Volk TE37 Wheels', sponsor: 'by Rays Engineering', endsInDays: 3, value: '$2,400', entries: 4820, emoji: '🛞' },
-  { id: 'g2', prize: 'GoPro Hero + Suction Mount Kit', sponsor: 'Capture your runs', endsInDays: 8, value: '$520', entries: 9140, emoji: '🎥' },
-  { id: 'g3', prize: '$1,000 Detailing Gift Card', sponsor: 'Adam’s Polishes', endsInDays: 1, value: '$1,000', entries: 12030, emoji: '✨' },
+  { id: 'g2', prize: 'Full Custom Vehicle Wrap', sponsor: 'Any design, pro install', endsInDays: 6, value: '$3,500', entries: 7610, emoji: '🎨' },
+  { id: 'g3', prize: 'Sim Rig + PS5 + Wheel', sponsor: 'Full racing cockpit setup', endsInDays: 9, value: '$1,800', entries: 15240, emoji: '🎮' },
+  { id: 'g4', prize: 'Laguna Seca Track Day', sponsor: 'Car + coaching included', endsInDays: 4, value: '$1,200', entries: 9870, emoji: '🏁' },
+  { id: 'g5', prize: '$1,000 Detailing Gift Card', sponsor: 'Adam’s Polishes', endsInDays: 1, value: '$1,000', entries: 12030, emoji: '✨' },
 ]
 
 export const MERCH = [
   { id: 'm1', name: 'Redline Logo Tee', price: 32, emoji: '👕', color: '#dc2626', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Wiki_Loves_Bangla_T-Shirt_Black.jpg/960px-Wiki_Loves_Bangla_T-Shirt_Black.jpg' },
-  { id: 'm2', name: 'Apex Snapback', price: 28, emoji: '🧢', color: '#ef4444', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Snapback_Hat.jpg/960px-Snapback_Hat.jpg' },
+  { id: 'm2', name: 'Apex Snapback', price: 28, emoji: '🧢', color: '#ef4444', img: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Baseball_cap.png' },
   { id: 'm3', name: 'Touge Hoodie', price: 64, emoji: '🧥', color: '#b91c1c', img: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Fastcolors-men_fashion_sweatshirt-back-printed.jpg' },
   { id: 'm4', name: 'Tach Sticker Pack', price: 12, emoji: '🩹', color: '#f87171', img: 'https://upload.wikimedia.org/wikipedia/commons/4/45/British_Columbia_Sticker_Decal_May_2009.jpg' },
-  { id: 'm5', name: 'Pit Crew Jacket', price: 98, emoji: '🏎️', color: '#991b1b', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Black_bomber_jacket.jpg/960px-Black_bomber_jacket.jpg' },
+  { id: 'm5', name: 'Pit Crew Jacket', price: 98, emoji: '🧥', color: '#991b1b', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Windbreaker_Jacket%2C_Hood_Outside.jpg/960px-Windbreaker_Jacket%2C_Hood_Outside.jpg' },
   { id: 'm6', name: 'Redline Enamel Pin', price: 9, emoji: '📌', color: '#dc2626', img: 'https://upload.wikimedia.org/wikipedia/commons/4/40/CCS_Pin_Badge.jpg' },
+  { id: 'm7', name: 'Apex Beanie', price: 24, emoji: '🧶', color: '#ef4444', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Beanie_hat_by_Polo_Ralph_Lauren.jpg/960px-Beanie_hat_by_Polo_Ralph_Lauren.jpg' },
+  { id: 'm8', name: "Driver's Gloves", price: 45, emoji: '🧤', color: '#b91c1c', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Peccary_Driving_Glove_Black.jpg/960px-Peccary_Driving_Glove_Black.jpg' },
 ]
 
 export const CHANNELS = [
