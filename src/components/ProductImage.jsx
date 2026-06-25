@@ -1,19 +1,12 @@
 import { useState } from 'react'
+import Img from './Img'
 
 /** Real product photo with a graceful emoji-on-gradient fallback. */
 export default function ProductImage({ product, className = 'h-full w-full object-cover' }) {
   const [failed, setFailed] = useState(false)
 
   if (product.img && !failed) {
-    return (
-      <img
-        src={product.img}
-        alt={product.name}
-        loading="lazy"
-        onError={() => setFailed(true)}
-        className={className}
-      />
-    )
+    return <Img src={product.img} alt={product.name} onError={() => setFailed(true)} className={className} />
   }
 
   return (

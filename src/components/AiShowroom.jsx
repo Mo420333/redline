@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Reveal from './Reveal'
 import SectionHeading from './SectionHeading'
+import Img from './Img'
 import { fetchUnsplash, photoApiEnabled } from '../lib/carImage'
 
 const W = (p) => {
@@ -184,12 +185,16 @@ export default function AiShowroom() {
                       <span className="text-sm">{carName}</span>
                     </div>
                   ) : (
-                    <img
-                      src={src}
-                      alt={carName}
-                      onError={() => setImgFailed(true)}
-                      className="relative aspect-video w-full rounded-xl border border-white/15 bg-black/30 object-contain shadow-2xl"
-                    />
+                    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/15 shadow-2xl">
+                      {/* Blurred fill so the full-frame car never sits on flat bars */}
+                      <img src={src} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-xl" />
+                      <Img
+                        src={src}
+                        alt={carName}
+                        onError={() => setImgFailed(true)}
+                        className="absolute inset-0 h-full w-full object-contain"
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="mt-1 w-full origin-top scale-y-[-1] opacity-25 blur-[2px]" style={{ maxWidth: '78%' }} aria-hidden="true">

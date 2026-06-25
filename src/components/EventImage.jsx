@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Img from './Img'
 import { fetchUnsplash, photoApiEnabled } from '../lib/carImage'
 
 /**
@@ -25,10 +26,9 @@ export default function EventImage({ event }) {
   if (!src || failed) return null
 
   return (
-    <img
+    <Img
       src={src}
       alt={event.city}
-      loading="lazy"
       onError={() => setFailed(true)}
       className="absolute inset-0 h-full w-full object-cover"
     />

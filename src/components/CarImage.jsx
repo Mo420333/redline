@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Img from './Img'
 import { fetchUnsplash, photoApiEnabled } from '../lib/carImage'
 
 /**
@@ -24,15 +25,7 @@ export default function CarImage({ post, className = 'h-full w-full object-cover
   }, [post.kw, post.mine])
 
   if (src && !failed) {
-    return (
-      <img
-        src={src}
-        alt={post.car}
-        loading="lazy"
-        onError={() => setFailed(true)}
-        className={className}
-      />
-    )
+    return <Img src={src} alt={post.car} onError={() => setFailed(true)} className={className} />
   }
 
   return (
